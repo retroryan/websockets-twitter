@@ -4,6 +4,7 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import models.City
 
 /**
  * Add your spec here.
@@ -26,8 +27,17 @@ class ApplicationSpec extends Specification {
         
         status(home) must equalTo(OK)
         contentType(home) must beSome.which(_ == "text/html")
-        contentAsString(home) must contain ("Your new application is ready.")
+        contentAsString(home) must contain ("Welcome to Utah Scala")
       }
     }
+  }
+
+  //add more extensive testing, right now this just throws an excpetion if the city is not found
+  "City DB" should {
+      "add a new city" in {
+        val cityId = City.addCity("Los Angles")
+        val city = City.getCity(cityId)
+
+      }
   }
 }
