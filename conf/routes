@@ -3,10 +3,16 @@
 # ~~~~
 
 # Home page
-GET     /                          controllers.Application.index
-GET    /sample                     controllers.Application.sample
-POST    /addCity                   controllers.Application.addCity
-GET     /cities                    controllers.Application.getCities
+GET    /                        controllers.Application.index
+GET    /sample                  controllers.Application.sample
+POST   /addCity                 controllers.Application.addCity
+GET    /cities                  controllers.Application.getCities
+
+GET    /cityManager             controllers.Assets.at(path="/public", file="cityManager.html")
+POST   /addCityJson             controllers.Application.addCityJson
+
+GET     /countdown              controllers.CountdownClock.countdown
+GET     /clock                  controllers.CountdownClock.socketClock
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET    /assets/*file            controllers.Assets.at(path="/public", file)

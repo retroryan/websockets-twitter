@@ -3,7 +3,75 @@
 <head>
     <title></title>
 </head>
+
+<script src="http://code.jquery.com/jquery-1.7.2.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        getCities();
+
+        $("#submitCity").bind('click', function () {
+            saveCity();
+        });
+
+    });
+
+    function getCities() {
+        $("#cities").empty();
+
+        return $.get("/cities", function(data) {
+            return $.each(data, function(index, item) {
+                return $("#cities").append($("<li>").text(item.name));
+            });
+        });
+    };
+
+
+    function saveCity() {
+        var cityName = $("#cityName").val();
+
+        var cityJson = JSON.stringify({name:cityName});
+        console.log("sending " + cityJson);
+
+        jqxhr = $.ajax({
+            url: "../addCityJson",
+            data: cityJson,
+            contentType: "application/json",
+            type: "POST",
+            dataType: "json"
+        });
+
+        jqxhr.done(
+                function (data) {
+                    getCities()
+                    console.log("saved city:" + data)
+                    $("#tweets").append("<h4>success: " + data + "</h4>")
+                });
+
+        jqxhr.fail(
+                function (data, textStatus, errorThrown) {
+                    $("#tweets").append("<h4>error: " + data + "</h4>")
+                });
+    }
+
+</script>
+
 <body>
+<h1>City Manager</h1>
+
+<ul id="cities"></ul>
+
+City Name: <input type="text" id="cityName" value=""/>
+
+<br>
+<input type="submit" id="submitCity" value="Save"/>
+
+
+<div id="tweets">
+
+</div>
 
 </body>
 </html>
