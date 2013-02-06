@@ -5,7 +5,7 @@ import play.api._
 import libs.json.JsValue
 import play.api.mvc._
 
-import play.api.libs.{ Comet }
+import play.api.libs.{Comet}
 import play.api.libs.iteratee._
 import play.api.libs.concurrent._
 
@@ -25,8 +25,9 @@ object CountdownClock extends Controller {
 
     val dateFormat = new SimpleDateFormat("HH mm ss")
 
-    Enumerator.fromCallback { () =>
-      Promise.timeout(Some(dateFormat.format(new Date)), 100 milliseconds)
+    Enumerator.fromCallback {
+      () =>
+        Promise.timeout(Some(dateFormat.format(new Date)), 100 milliseconds)
     }
   }
 
@@ -35,15 +36,17 @@ object CountdownClock extends Controller {
       Ok(views.html.countdown(request))
   }
 
-  def socketClock = WebSocket.using[String] { request =>
+  def socketClock = WebSocket.using[String] {
+    request =>
 
-  // Log events to the console
-    val in = Iteratee.foreach[String]( inVal => {
-      println("recieved value: " + inVal)
-    }).map { finalVal =>
-      println("final value " + finalVal)
-    }
+    // Log events to the console
+      val in = Iteratee.foreach[String](inVal => {
+        println("recieved value: " + inVal)
+      }).map {
+        finalVal =>
+          println("final value " + finalVal)
+      }
 
-    (in, clock)
+      (in, clock)
   }
 }

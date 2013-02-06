@@ -3,7 +3,6 @@ package models
 import scala.collection.mutable.{SynchronizedMap, HashMap}
 import java.util.UUID
 import play.api.libs.json._
-import com.sun.codemodel.internal.JStringLiteral
 
 case class City(id: Long, name: String)
 
@@ -30,7 +29,7 @@ object City {
         id = (json \ "id").as[Long],
         name = (json \ "name").as[String]))
 
-    def writes(city: City) : JsValue =
+    def writes(city: City): JsValue =
       Json.obj(
         "id" -> city.id,
         "name" -> city.name

@@ -5,22 +5,9 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.libs.json.Json._
 import models.City
-import play.api.libs.json.JsValue
 import play.api.data.Form
 
 object Application extends Controller {
-
-
-  /**
-   * Describe the computer form (used in both edit and create screens).
-   */
-  val taskForm = Form(
-    tuple(
-      "name" -> nonEmptyText,
-      "state" -> nonEmptyText
-    )
-  )
-
 
   def index = Action {
     Ok(views.html.index("Two was here"))
