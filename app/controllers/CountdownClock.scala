@@ -3,9 +3,10 @@ package controllers
 
 import play.api._
 import libs.json.JsValue
+import play.api.libs.json.Json._
+
 import play.api.mvc._
 
-import play.api.libs.{Comet}
 import play.api.libs.iteratee._
 import play.api.libs.concurrent._
 
@@ -18,7 +19,7 @@ object CountdownClock extends Controller {
    * A String Enumerator producing a formatted Time message every 100 millis.
    * A callback enumerator is pure an can be applied on several Iteratee.
    */
-  lazy val clock: Enumerator[String] = {
+  lazy val clock: Enumerator[JsValue] = {
 
     import java.util._
     import java.text._
@@ -27,7 +28,7 @@ object CountdownClock extends Controller {
 
     Enumerator.fromCallback {
       () =>
-        Promise.timeout(Some(dateFormat.format(new Date)), 100 milliseconds)
+        Promise.timeout( Some(toJson(dateFormat.format(new Date))), 100 milliseconds)
     }
   }
 
@@ -36,15 +37,17 @@ object CountdownClock extends Controller {
       Ok(views.html.countdown(request))
   }
 
-  def socketClock = WebSocket.using[String] {
+  def socketClock = WebSocket.using[JsValue] {
+
+    //should this be implicit?
     request =>
 
     // Log events to the console
-      val in = Iteratee.foreach[String](inVal => {
-        println("recieved value: " + inVal)
+      val in = Iteratee.foreach[JsValue](inVal => {
+        Logger.info("recieved value: " + inVal)
       }).map {
         finalVal =>
-          println("final value " + finalVal)
+          Logger.info("final value " + finalVal)
       }
 
       (in, clock)

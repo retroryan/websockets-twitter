@@ -20,15 +20,15 @@
             var clockSocket = new WS("@routes.CountdownClock.socketClock().webSocketURL()")
 
             var sendMessage = function() {
-                clockSocket.send(
-                       "Hello World!"
-                );
+                clockSocket.send( JSON.stringify(
+                        {text: "Hello World!"}
+                ))
             }
 
             var receiveEvent = function(event) {
-                //var data = JSON.parse(event.data)
+                var data = JSON.parse(event.data)
                 $('#clock').html('')
-                console.log("data:" + event.data)
+                console.log("data:" + data)
                 var el = $('<div class="message"><p></p></div>')
                 $("p", el).text(event.data)
                 $('#clock').append(el)
